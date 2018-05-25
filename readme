@@ -1,0 +1,5 @@
+
+/
+#define SEND_BUFF_ADDR		0xe000000 //data's phys addr for sending 
+#define REV_BUFF_ADDR		0xf000000 //received data's phys addr
+#define CTRL_BUFF_ADDR		0xe000000 //ctrl_msg's phys addr
