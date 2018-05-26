@@ -81,8 +81,10 @@ MDC_DIV_64, MDC_DIV_96, MDC_DIV_128, MDC_DIV_224 };
 /* Default SEND and RECV buffer descriptors (BD) numbers.
  * BD Space needed is (XEMACPS_SEND_BD_CNT+XEMACPS_RECV_BD_CNT)*8
  */
-#undef  DEBUG
-#define DEBUG
+//#undef  DEBUG
+//#define DEBUG
+#define DEBUG 1
+
 
 #define XEMACPS_SEND_BD_CNT     256
 #define XEMACPS_RECV_BD_CNT     256
@@ -824,19 +826,19 @@ static void xemacps_adjust_link(struct net_device *ndev)
 }
 
 struct phy_driver genphy_driver;
-// int phy_init_hw(struct phy_device *phydev)
-// {
-//     int ret;
+ int phy_init_hw(struct phy_device *phydev)
+ {
+     int ret;
 
-//     if (!phydev->drv || !phydev->drv->config_init)
-//         return 0;
+     if (!phydev->drv || !phydev->drv->config_init)
+         return 0;
 
-//     ret = phy_scan_fixups(phydev);
-//     if (ret < 0)
-//         return ret;
+     ret = phy_scan_fixups(phydev);
+     if (ret < 0)
+         return ret;
 
-//     return phydev->drv->config_init(phydev);
-// }
+     return phydev->drv->config_init(phydev);
+ }
 /**
  * phy_attach_direct - attach a network device to a given PHY device pointer
  * @dev: network device to attach
@@ -1628,7 +1630,8 @@ static int xemacps_rx_poll(struct napi_struct *napi, int budget)
 
     spin_lock(&lp->rx_lock);
     while (1) {
-
+	dev_dbg(&lp->pdev->dev, "dev:xemacps_rx_poll\n");
+   	 printk(KERN_ERR "xemacps_rx_poll\n");
         count = xemacps_rx(lp, budget - work_done);
         if (count == 0xFFFFFFFF) {
             napi_complete(napi);
